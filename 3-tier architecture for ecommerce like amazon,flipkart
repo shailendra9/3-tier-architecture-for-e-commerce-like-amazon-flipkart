@@ -1,0 +1,279 @@
+3 tier Architecture for ecommerce
+
+ Introduction
+
+Distributed, client-server:
+
+
+Clients can be either thin clients or other full-fledged clients having Windows/Linux/Mac installed.
+‘n’ is the maximum number of clients allowed
+The central server and the database server can be deployed on the same machine. The central server is the application server. This enables us to use the thin clients.
+The proximity of the application server and the database server will boost performance
+The thin clients can be connected to the central server by a LAN, since the deployment is for the small shops
+Each client may have a display, an input device like keyboard (probably customized/ scaled down version), bar-code reader, and printer.
+3-tier
+three tier architecture for Ecommerce website
+
+Client tier: Is responsible for the presentation of data, receiving user events and controlling the user interface. The actual business logic (e.g. calculating total cost and tax) has been moved to an application-server.
+Application Server tier: Business-objects that implement the business rules “live” here, and are available to the client-tier. This tier protects the data from direct access by the clients. Our object oriented analysis “OOA” will be aimed at the development of this layer.
+Data Server tier: This tier is responsible for data storage. It is important to note that boundaries between tiers are logical. As shown in the deployment diagram above, the Data tier and the Application Server tier will reside on the same machine.
+This architecture enables us to achieve the required Quality Attributes as follows:
+
+Performance and Cost: The decoupling of the clients from the application server enables us to use high performance machine for only the application server, the clients can be thin clients. Thus reducing the overall cost. Since the data server and application server reside on the same machine, it would be possible to tune the data server and the application programs to achieve the desired performance, network overload is avoided. Dynamic load balancing can be done, i.e., if bottlenecks in terms of performance occur, the server process can be moved to other servers at runtime.
+Flexibility: Since we have a different client-tier, clients can be thin clients, or full-fledged clients running any of the operating systems. It is easily possible to increase the number of terminals as required by the manager.
+Security: The security features can be implemented at the application server layer. Security is bolstered by the decoupling of the application server and the clients. As a rule servers are “trusted” systems. Their authorization is simpler than that of thousands of “untrusted” client-PCs. Data protection and security is simpler to obtain. Therefore it makes sense to run critical business processes, that work with security sensitive data, on the server.
+Modifiability: Re-definition of the storage strategy won’t influence the clients. RDBMS’ offer a certain independence from storage details for the clients. In the future, even radical changes, like let’s say switching form an RDBMS to an OODBS (may be for performance reasons), won’t influence the client. In well designed systems, the client still accesses data over a stable and well designed interface which encapsulates all the storage details. The application server can be built using the OOD paradigm and can provide for the incremental changes. Also addition and deletion of patches from the application server can be done on the fly without affecting any of the clients.
+ 
+
+Comparison with other Architecture:
+
+Our 3 tier architecture is similar to the layered architecture. Where the database layer is at the core and application server layer and the client layer work on top of it in that order.
+
+3-tier architecture is also similar to the client serve architecture, or it is a specialization of client server architecture.
+
+We have not preferred the pipe-filter architecture as the top level architecture since, in the broader scope, our requirements do not hint at only the data processing/manipulating aspects of ERP. There are many quality requirements which are crucial for the success of the project. We may have pipe-filter like architecture for some of the embedded modules in the application server layer.
+
+ 
+
+
+        Data Model
+
+The following databases will be required for the system to carry out the requirements detailed in the software requirements specification. In the Entity Relation Diagram, CO refers to Customer Order, and VI refers to Vendor Invoice.
+
+ 
+
+data_modal
+
+In the following we list the attributes of each of the tables, their primary keys (underlined) and the foreign keys (if any)
+
+Item
+Item-Code
+Description
+IsReturnable
+Type (loose/packed – if loose, it will have rate/unit, else it will have price)
+Transient Item Info
+Item-Code (foreign key)
+Category-Code
+Cost (per unit item)
+Expiry-date
+Vendor-id
+Commission
+Transient Info
+Item-Code
+Category-Code
+Quantity (the remaining quantity)
+Safe-Quantity (this is the derived attribute and the system might modify this attribute periodically. This is used to indicate whether the item is nearly out of stock)
+Vendor Information
+Vendor-Id
+Name
+Address
+Phone
+Supplies Items
+Vendor-Id (foreign key)
+Item-Code (foreign key)
+Category-Code (foreign key)
+Vendor Payment
+Vendor-Id (foreign key)
+Payment-Number
+Date
+Amount
+Payment-Mode (this will be a finite domain attribute – {cash, credit-card, credit})
+Purchase Order
+Order-Id
+Vendor-Id (foreign key)
+Date
+Purchase Details
+Order-Id (foreign key)
+Item-Code (foreign key)
+Category-Code (foreign key)
+Quantity (for each of the ordered item)
+Vendor Invoice (VI)
+Invoice-Id
+Vendor-Id (foreign key)
+Discrepancy-Id (foreign key)
+Order-Id (foreign key — could be null)
+Date
+VI Contents
+Invoice-Id (foreign key)
+Item-Code (foreign key)
+Category-Code (foreign key)
+Quantity
+Delivery Discrepancy
+Discrepancy-Id
+Invoice-Id (foreign key)
+Item-Code (foreign key)
+Category-Code (foreign key)
+Quantity
+Customer Information
+Customer-Id
+Name
+Address
+Phone
+Customer Order (CO)
+Order-Id
+Customer-Id (foreign key)
+Date
+CO Contents
+Order-Id (foreign key)
+Item-Code (foreign key)
+Category-Code (foreign key)
+Cash Memo, Receipt
+Receipt-Id
+Cost
+Tax
+Payment-Mode (this will be a finite domain attribute – {cash, credit-card, credit})
+Customer Payment
+Payment-Id
+Customer-Id (foreign key)
+Date
+ 
+
+ 
+
+         User Interface
+
+ 
+
+·         Admin Screens
+
+Admin screen
+Start-up
+Please Authenticate Yourself screen
+Stock taking
+Stock Summary screen / print
+Stock Item screen
+Setting up customer loyalty benefits
+Loyalty Program Scheme Settings screen
+Special Customer Settings screen
+Rewards Points Rules screen
+New Reward Points Rule
+Reward Points Redemption Rules screen
+New Reward Points Redemption rule screen
+Discounts screen
+New Discount screen
+Preparing the orders and demand forecasting + Cash flow forecasting + Setting up discounts and sales
+Sales Trends screen / print
+Select Options screen
+Demand Forecast screen / print
+Set Forecast Parameters screen
+Cash Flow Forecast screen / print
+(same Set Forecast Parameters screen as demand forecast)
+Discounts Schemes Summary screen / print
+New Discount Scheme screen / print
+Pending Orders Summary screen / print
+Order screen / print (has options for each item: Order quantity, frequency, Delivery challan quantity, Verified filed quantity, Damage / discrepancy quantity, Sold, Unsold, Returned, Bill quantity, Bill amount, Contested amount) tracks to DC no/date, bill no/date, allows multiple DCs, bills, POs to be linked to each other. Think about this, it is not easy to visualize as one view!!!!!!!!
+Customer credit tracking
+Customer Group Credit Summary screen
+Create New Group screen
+Customer Group Trends screen
+Customer Credit Summary screen
+Customer Bill screen
+Customer Trend screen
+Filing stocks
+Filing Stock Item screen
+Bar Code print
+Expenses
+Enter Expense Voucher screen
+Set Expense as Recurring screen
+Shut-down
+Shut-down Confirmation screen
+        Vendor Session Screens
+
+Vendors Summary screen
+Add / Edit Vendor screen
+Add / Edit Vendor Item screen
+Vendor Statement screen
+Vendor Payment screen
+(same Order screen / print in preparing orders use case)
+Create new vendor account
+(same Add / Edit Vendor screen as above)
+Placing orders
+(same Order screen / print in preparing orders use case)
+Accepting delivery and billing
+(same Order screen / print in preparing orders use case)
+Vendor returns
+(same Order screen / print in preparing orders use case)
+Vendor settlement
+(same as Vendor Payment screen)
+          Customer Session Screens
+
+Ordering
+Order / Bill screen
+Up-sale Items screen
+Recurring Order screen
+Credit Card Transaction screen
+Credit Transaction screen
+Add / Edit Customer screen
+Order Settlement
+(same Order / Bill screen as above)
+Creating New Account
+(same Add / Edit Customer screen as above)
+Account Settlement
+Customer Statement screen
+(same Order / Bill screen as above)
+Goods Returns
+Search Order / Bill screen
+(same Order / Bill screen as above)
+
+
+Admin screen
+Please Authenticate Yourself screen
+Stock Summary screen / print
+Stock Item screen
+Loyalty Program Scheme Settings screen
+Special Customer Settings screen
+Rewards Points Rules screen
+New Reward Points Rule
+Reward Points Redemption Rules screen
+New Reward Points Redemption rule screen
+Discounts screen
+New Discount screen
+Sales Trends screen / print
+Select Options screen
+Demand Forecast screen / print
+Set Forecast Parameters screen
+Cash Flow Forecast screen / print
+(same Set Forecast Parameters screen as demand forecast)
+Discounts Schemes Summary screen / print
+New Discount Scheme screen / print
+Pending Orders Summary screen / print
+Order screen / print (has options for each item: Order quantity, frequency, Delivery challan quantity, Verified filed quantity, Damage / discrepancy quantity, Sold, Unsold, Returned, Bill quantity, Bill amount, Contested amount) tracks to DC no/date, bill no/date, allows multiple DCs, bills, POs to be linked to each other. Think about this, it is not easy to visualize as one view!!!!!!!!
+Customer Group Credit Summary screen
+Create New Group screen
+Customer Group Trends screen
+Customer Credit Summary screen
+Customer Bill screen
+Customer Trend screen
+Filing Stock Item screen
+Bar Code print
+Enter Expense Voucher screen
+Set Expense as Recurring screen
+Shut-down Confirmation screen
+Vendors Summary screen
+Add / Edit Vendor screen
+Add / Edit Vendor Item screen
+Vendor Statement screen
+Vendor Payment screen
+(same Order screen / print in preparing orders use case)
+(same Add / Edit Vendor screen as above)
+(same Order screen / print in preparing orders use case)
+(same Order screen / print in preparing orders use case)
+(same Order screen / print in preparing orders use case)
+(same as Vendor Payment screen)
+Order / Bill screen
+Up-sale Items screen
+Recurring Order screen
+Credit Card Transaction screen
+Credit Transaction screen
+Add / Edit Customer screen
+(same Order / Bill screen as above)
+(same Add / Edit Customer screen as above)
+Customer Statement screen
+(same Order / Bill screen as above)
+Search Order / Bill screen
+(same Order / Bill screen as above)
+
+Enter Expense Voucher screen
+Set Expense as Recurring screen
+Shut-down Confirmation screen
+ 
